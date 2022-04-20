@@ -40,6 +40,9 @@ void GameScene::Initialize() {
 		worldtransform_[i].Initialize();
 	}
 
+	viewprojection_.nearZ = 52.0f;
+	viewprojection_.farZ = 53.0f;
+
 	viewprojection_.Initialize();
 
 
