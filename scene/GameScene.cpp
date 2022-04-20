@@ -36,7 +36,7 @@ void GameScene::Initialize() {
 	{
 		worldtransform_[i].scale_ = {1.0f,1.0f,1.0f,};
 		worldtransform_[i].rotation_ = {rotDist(engine), rotDist(engine), rotDist(engine)};
-		worldtransform_[i].translation_ = {rotDist(engine), rotDist(engine), rotDist(engine)};
+		worldtransform_[i].translation_ = {posDist(engine), posDist(engine), posDist(engine)};
 		worldtransform_[i].Initialize();
 	}
 
