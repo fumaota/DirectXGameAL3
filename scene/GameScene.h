@@ -61,5 +61,19 @@ class GameScene {
 	//ビュープロジェクト
 	ViewProjection viewprojection_;
 	
-	float viewAngle = 0.0f;
+	//float viewAngle = 0.0f;
+
+	public:
+		enum PartId {
+			Root,
+			Spine,
+			Chest,
+			Head,
+			ArmL,
+			ArmR,
+			Hip,
+			LegL,
+			LegR,
+	};
+
 };

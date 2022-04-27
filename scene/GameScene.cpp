@@ -24,31 +24,71 @@ void GameScene::Initialize() {
 	//worldtransform_.scale_ = {5.0f, 5.0f, 5.0f};
 	//worldtransform_.rotation_ = {XM_PI / 4.0f, XM_PI / 4.0f, 0.0f};
 	//worldtransform_.translation_ = {10.0f, 10.0f, 10.0f};
-	//ワールドトランスフォームの初期化
-	//worldtransform_.Initialize();
-	viewprojection_.Initialize();
-	std::random_device seed_gen;
+	
+	
+	//ランダム
+	/*std::random_device seed_gen;
 	std::mt19937_64 engine(seed_gen());
 	std::uniform_real_distribution<float> rotDist(0.0f, XM_2PI);
-	std::uniform_real_distribution<float> posDist(-10.0f, 10.0f);
+	std::uniform_real_distribution<float> posDist(-10.0f, 10.0f);*/
 
-	for (size_t i = 0; i < _countof(worldtransform_);i++) 
-	{
-		worldtransform_[i].scale_ = {1.0f,1.0f,1.0f,};
+	//for (size_t i = 0; i < _countof(worldtransform_);i++) 
+	//{
+		//2-3
+		/*worldtransform_[i].scale_ = {1.0f,1.0f,1.0f,};
 		worldtransform_[i].rotation_ = {rotDist(engine), rotDist(engine), rotDist(engine)};
 		worldtransform_[i].translation_ = {posDist(engine), posDist(engine), posDist(engine)};
-		worldtransform_[i].Initialize();
-	}
+		worldtransform_[i].Initialize();*/
 
-	viewprojection_.nearZ = 52.0f;
-	viewprojection_.farZ = 53.0f;
+	//}
+	//2-3
+	/*viewprojection_.nearZ = 52.0f;
+	viewprojection_.farZ = 53.0f;*/
+
+	//2-4
+	worldtransform_[PartId::Root].Initialize();
+
+	worldtransform_[PartId::Spine].translation_ = {0, 4.5f, 0};
+	worldtransform_[PartId::Spine].parent_ = &worldtransform_[PartId::Root];
+	worldtransform_[PartId::Spine].Initialize();
+
+	worldtransform_[PartId::Chest].translation_ = {0, 0, 0};
+	worldtransform_[PartId::Chest].parent_ = &worldtransform_[PartId::Spine];
+	worldtransform_[PartId::Chest].Initialize();
+	worldtransform_[PartId::Head].translation_ = {0, 4.5f, 0};
+	worldtransform_[PartId::Head].parent_ = &worldtransform_[PartId::Chest];
+	worldtransform_[PartId::Head].Initialize();
+	worldtransform_[PartId::ArmL].translation_ = {-4.5f, 0, 0};
+	worldtransform_[PartId::ArmL].parent_ = &worldtransform_[PartId::Chest];
+	worldtransform_[PartId::ArmL].Initialize();
+	worldtransform_[PartId::ArmR].translation_ = {4.5f, 0, 0};
+	worldtransform_[PartId::ArmR].parent_ = &worldtransform_[PartId::Chest];
+	worldtransform_[PartId::ArmR].Initialize();
+
+	worldtransform_[PartId::Hip].translation_ = {0, -4.5f, 0};
+	worldtransform_[PartId::Hip].parent_ = &worldtransform_[PartId::Spine];
+	worldtransform_[PartId::Hip].Initialize();
+	worldtransform_[PartId::LegL].translation_ = {-4.5f, -4.5f, 0};
+	worldtransform_[PartId::LegL].parent_ = &worldtransform_[PartId::Hip];
+	worldtransform_[PartId::LegL].Initialize();
+	worldtransform_[PartId::LegR].translation_ = {4.5f, -4.5f, 0};
+	worldtransform_[PartId::LegR].parent_ = &worldtransform_[PartId::Hip];
+	worldtransform_[PartId::LegR].Initialize();
+
+	
+
+	// EX
+	/*for (size_t i = 0; i < _countof(worldtransform_); i++) {
+	    worldtransform_[i].scale_ = {5.0f, 5.0f, 5.0f};
+	    worldtransform_[i].translation_ = {-30.0f*i, 20.0f, 0.0f};
+	    worldtransform_[i].Initialize();
+	}*/
 
 	viewprojection_.Initialize();
-
-
 }
 
 void GameScene::Update() { 
+	//2-2
 	////移動
 	//XMFLOAT3 move = {0, 0, 0};
 
@@ -88,7 +128,7 @@ void GameScene::Update() {
 	//debugText_->SetPos(50, 70);
 	//debugText_->Printf(
 	//  "eye(%f,%f,%f)", viewprojection_.target.x, viewprojection_.target.y, viewprojection_.target.z);
-	////回転
+	//////回転
 	//const float kUpRotSpeed = 0.05f;
 
 	//if (input_->PushKey(DIK_SPACE)) {
@@ -100,7 +140,8 @@ void GameScene::Update() {
 
 	//viewprojection_.UpdateMatrix();
 
-	if (input_->PushKey(DIK_UP)) {
+	//2-3
+	/*if (input_->PushKey(DIK_UP)) {
 		viewprojection_.fovAngleY += 0.01f;
 		viewprojection_.fovAngleY = min(viewprojection_.fovAngleY, XM_PI);
 	} else if (input_->PushKey(DIK_DOWN)) {
@@ -119,9 +160,54 @@ void GameScene::Update() {
 	viewprojection_.UpdateMatrix();
 
 	debugText_->SetPos(50, 130);
-	debugText_->Printf("nearZ:%f", viewprojection_.nearZ);
+	debugText_->Printf("nearZ:%f", viewprojection_.nearZ);*/
 
-	
+	//2-4
+	XMFLOAT3 move = {0, 0, 0};
+
+	const float kCharacterSpeed = 0.2f;
+
+	if (input_->PushKey(DIK_LEFT)) {
+		move = {-kCharacterSpeed, 0, 0};
+	} else if (input_->PushKey(DIK_RIGHT)) {
+		move = {kCharacterSpeed, 0, 0};
+	}
+	worldtransform_[PartId::Root].translation_.x += move.x;
+	worldtransform_[PartId::Root].translation_.y += move.y;
+	worldtransform_[PartId::Root].translation_.z += move.z;
+
+	debugText_->SetPos(50, 150);
+	debugText_->Printf(
+		"Root:(%f,%f,%f)", worldtransform_[PartId::Root].translation_.x,
+				worldtransform_[PartId::Root].translation_.y,
+				worldtransform_[PartId::Root].translation_.z
+	);
+
+	worldtransform_[PartId::Root].UpdateMatrix();
+	worldtransform_[PartId::Spine].UpdateMatrix();
+	worldtransform_[PartId::Chest].UpdateMatrix();
+	worldtransform_[PartId::Head].UpdateMatrix();
+	worldtransform_[PartId::ArmL].UpdateMatrix();
+	worldtransform_[PartId::ArmR].UpdateMatrix();
+	worldtransform_[PartId::Hip].UpdateMatrix();
+	worldtransform_[PartId::LegL].UpdateMatrix();
+	worldtransform_[PartId::LegR].UpdateMatrix();
+
+	const float kChestRotSpeed = 0.05f;
+
+	if (input_->PushKey(DIK_U)) {
+		worldtransform_[PartId::Chest].rotation_.y -= kChestRotSpeed;
+	} else if (input_->PushKey(DIK_I)) {
+		worldtransform_[PartId::Chest].rotation_.y += kChestRotSpeed;
+	}
+
+	const float kHipRotSpeed = 0.05f;
+
+	if (input_->PushKey(DIK_J)) {
+		worldtransform_[PartId::Hip].rotation_.y -= kHipRotSpeed;
+	} else if (input_->PushKey(DIK_K)) {
+		worldtransform_[PartId::Hip].rotation_.y += kHipRotSpeed;
+	}
 }
 
 void GameScene::Draw() {
@@ -150,9 +236,27 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	for (size_t i = 0; i < _countof(worldtransform_);i++) {
+	/*for (size_t i = 0; i < _countof(worldtransform_);i++) {
 		model_->Draw(worldtransform_[i], viewprojection_, textureHandle_);	
-	}
+	}*/
+
+	//2-4
+	//model_->Draw(worldtransform_[PartId::Root], viewprojection_, textureHandle_);
+	//model_->Draw(worldtransform_[PartId::Spine], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::Chest], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::Head], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::ArmL], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::ArmR], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::Hip], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::LegL], viewprojection_, textureHandle_);
+	model_->Draw(worldtransform_[PartId::LegR], viewprojection_, textureHandle_);
+
+	//EX
+	/*for (size_t i = 0; i < _countof(worldtransform_);i++) {
+		model_->Draw(worldtransform_[i], viewprojection_, textureHandle_);	
+	}*/
+
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
